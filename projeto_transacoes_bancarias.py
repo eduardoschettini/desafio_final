@@ -152,11 +152,47 @@ def calcular_media():
     """
     pass
 
-def consultar_transacao_por_ID():
-    """
-    Consulta uma transação específica pelo seu UUID.
-    """
-    pass
+def consultar_transacao_por_ID(tela):
+    nonlocal bd
+    nonlocal nomeUsuario
+    
+    jaPesquisou = False
+
+    while True:
+        print(f"Bem-vindo, {nomeUsuario}!")
+        print('conta: 0000001-0')
+        print("\n- Pesquisar Transação por ID.")
+        print("\nEscolha uma das opções abaixo:")
+
+        if not jaPesquisou:
+            print("1. Pesquisar uma transação")
+        else:
+            print("1. Pesquisar uma nova transação")
+
+        print("2. Voltar ao menu principal")
+
+        if tela != 'tela_inicial':
+            print("3. Voltar à tela anterior")
+
+        opcao =  input("Digite o número da opção: ")
+
+        match int(opcao):
+            case 1:
+                print("Opção selecionada: Visualizar relatórios\n")
+                transacao = next((t for t in bd if t['UUID'] == uuid_to_search), None)
+                if transacao:
+                    print("Transação encontrada:", transacao)
+                else:
+                    print("Transação não encontrada.")
+                
+                jaPesquisou = True
+                continue
+            case 2:
+                tela_inicial()
+            
+    
+    
+
 
 def cadastrar_transacao():
     """
