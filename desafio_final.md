@@ -16,6 +16,10 @@ Também deve fazer com que o programa NUNCA pare, ou seja, caso ocorra um possí
 
 4. Caso por qualquer motivo queira os dados originais novamente, apage o json `transactions` na pasta `data` e inicie o programa novamente para gerar os dados. Os valores serão os mesmos, porém os UUID NÃO serão os mesmos!!
 
+5. A exibição do relatório deve conter:
+    - O valor total de transações da conta (calcular_total_transacoes)
+    - Todas as m5 transações realizadas
+
 ## Critérios (pontos):
 tipo|tarefas|validacoes|total|
 ----|-------|----------|-----|
