@@ -59,17 +59,47 @@ def load_bd(filepath='./data/transactions.json'):
     return bd
 
 def tela_inicial():
-    print("Bem-vindo <teu nome inteiro aqui>!")
-    print('conta: 0000001-0')
-    print("\nEste programa permite gerenciar transações de sua conta pessoal.")
-    print("\nEscolha uma das opções abaixo:")
-    print("1. Visualizar relatórios")
-    print("2. Cadastrar transações")
-    print("3. Editar transações")
-    print("4. Excluir transações")
-    print("-" * 10)
-    print("0. Sair")
-    print('\n')
+    nomeUsuario = input("Informe o seu nome: ")
+    
+    while True:
+        print(f"Bem-vindo, {nomeUsuario}!")
+        print('conta: 0000001-0')
+        print("\nEste programa permite gerenciar transações de sua conta pessoal.")
+        print("\nEscolha uma das opções abaixo:")
+        print("1. Visualizar relatórios")
+        print("2. Cadastrar transações")
+        print("3. Editar transações")
+        print("4. Excluir transações")
+        print("-" * 10)
+        print("0. Sair")
+        print('\n')
+
+        opcao =  input("Digite o número da opção: ")
+
+        match int(opcao):
+            case 1:
+                print("Opção selecionada: Visualizar relatórios\n")
+                visualizar_relatorios()
+                continue
+            case 2:
+                print("Cadastrar transações\n")
+                cadastrar_transacao()
+                continue
+            case 3:
+                print("Opção selecionada: Editar transações\n")
+                editar_transacao_por_ID()
+                continue
+            case 4:
+                print("Opção selecionada: Excluir transações\n")
+                excluir_transacao()
+                continue
+            case 0:
+                print("Obrigado por usar nosso programa!!!\n")
+                break
+            case _:
+                print("Opção inválida, escolha uma opcão válida.")
+                continue
+
 
 # -----------------------
 # PROGRAM functions 
