@@ -191,7 +191,7 @@ if __name__ == "__main__":
         criar_bd()
     
     # load bd 
-    bd = load_bd()
+    bd = load_bd() # carregar o banco de dados em uma lista em memória
     # -----------------------
 
     # -----------------------
@@ -200,4 +200,5 @@ if __name__ == "__main__":
     #limpar console (opcional)
     os.system('cls' if os.name == 'nt' else 'clear')
     # inicia o programa
+
     run()
