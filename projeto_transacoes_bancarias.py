@@ -198,7 +198,7 @@ def consultar_transacao_por_ID(tela):
 
                     transacao = next((t for t in bd if t['UUID'] == uuid_to_search), None)
                     if transacao:
-                        print("Transação encontrada: \n "
+                        print("Transação encontrada: \n"
                             f"UUID: {transacao['UUID']}\n"
                             f"Valor: {transacao['valor']}\n"
                             f"Categoria: {transacao['categoria']}\n\n")
