@@ -58,10 +58,15 @@ def load_bd(filepath='./data/transactions.json'):
         bd = json.load(file)
     return bd
 
-def tela_inicial():
-    nomeUsuario = input("Informe o seu nome: ")
+def tela_inicial(tela):
+    global nomeUsuario
     
-    while True:
+    ativo = True
+
+    if tela is None:
+        nomeUsuario = input("Informe o seu nome: ")
+    
+    while ativo:
         print(f"Bem-vindo, {nomeUsuario}!")
         print('conta: 0000001-0')
         print("\nEste programa permite gerenciar transações de sua conta pessoal.")
@@ -76,34 +81,38 @@ def tela_inicial():
         print('\n')
 
         opcao =  input("Digite o número da opção: ")
-
-        match int(opcao):
-            case 1:
-                print("Opção selecionada: Visualizar relatórios\n")
-                visualizar_relatorios()
-                continue
-            case 2:
-                print("Cadastrar transações\n")
-                cadastrar_transacao()
-                continue
-            case 3:
-                print("Opção selecionada: Editar transações\n")
-                editar_transacao_por_ID()
-                continue
-            case 4:
-                print("Opção selecionada: Excluir transações\n")
-                excluir_transacao()
-                continue
-            case 5:
-                print("Opção selecionada: Consultar transação por ID\n")
-                consultar_transacao_por_ID('tela_inicial')
-                continue
-            case 0:
-                print("Obrigado por usar nosso programa!!!\n")
-                break
-            case _:
-                print("Opção inválida, escolha uma opcão válida.")
-                continue
+        try:
+            match int(opcao):
+                case 1:
+                    print("Opção selecionada: Visualizar relatórios\n")
+                    visualizar_relatorios()
+                    continue
+                case 2:
+                    print("Cadastrar transações\n")
+                    cadastrar_transacao()
+                    continue
+                case 3:
+                    print("Opção selecionada: Editar transações\n")
+                    editar_transacao_por_ID()
+                    continue
+                case 4:
+                    print("Opção selecionada: Excluir transações\n")
+                    excluir_transacao()
+                    continue
+                case 5:
+                    print("Opção selecionada: Consultar transação por ID\n")
+                    consultar_transacao_por_ID('tela_inicial')
+                    continue
+                case 0:
+                    print("Obrigado por usar nosso programa!!!\n")
+                    ativo = False
+                    break
+                case _:
+                    print("Opção inválida, escolha uma opcão válida.")
+                    continue
+        except ValueError:
+            print("Por favor, digite um número inteiro válido para a opção.")
+            continue
 
 
 # -----------------------
@@ -117,7 +126,7 @@ def run():
     Esta é a função principal que vai rodar o programa
     """  
     # exibe a tela inicial
-    tela_inicial()
+    tela_inicial(None)
 
 def visualizar_relatorios():
     """
@@ -158,8 +167,8 @@ def calcular_media():
     pass
 
 def consultar_transacao_por_ID(tela):
-    #nonlocal bd
-    #nonlocal nomeUsuario
+    global bd
+    global nomeUsuario
     
     jaPesquisou = False
 
@@ -181,19 +190,47 @@ def consultar_transacao_por_ID(tela):
 
         opcao =  input("Digite o número da opção: ")
 
-        match int(opcao):
-            case 1:
-                print("Opção selecionada: Visualizar relatórios\n")
-                transacao = next((t for t in bd if t['UUID'] == uuid_to_search), None)
-                if transacao:
-                    print("Transação encontrada:", transacao)
-                else:
-                    print("Transação não encontrada.")
-                
-                jaPesquisou = True
-                continue
-            case 2:
-                tela_inicial()
+        try:
+            match int(opcao):
+                case 1:
+                    print("Opção selecionada: Visualizar relatórios\n")
+                    uuid_to_search = input("Digite o UUID da transação que deseja pesquisar: ")
+
+                    transacao = next((t for t in bd if t['UUID'] == uuid_to_search), None)
+                    if transacao:
+                        print("Transação encontrada: \n "
+                            f"UUID: {transacao['UUID']}\n"
+                            f"Valor: {transacao['valor']}\n"
+                            f"Categoria: {transacao['categoria']}\n\n")
+                    else:
+                        print("Transação não encontrada.")
+                    
+                    jaPesquisou = True
+                    continue
+                case 2:
+                    tela_inicial('consultar_transacao_por_ID')
+                    break
+                case 3:
+                    match tela:
+                        case 'visualizar_relatorios':
+                            visualizar_relatorios('consultar_transacao_por_ID')
+                            break
+                        case 'cadastrar_transacao':
+                            cadastrar_transacao('consultar_transacao_por_ID')
+                            break
+                        case 'editar_transacao_por_ID':
+                            editar_transacao_por_ID('consultar_transacao_por_ID')
+                            break  
+                        case 'excluir_transacao':
+                            excluir_transacao('consultar_transacao_por_ID')
+                            break
+                        case 'salvar_relatorio':
+                            salvar_relatorio('consultar_transacao_por_ID')
+                            break
+
+        except ValueError:
+            print("Por favor, digite um número inteiro válido para a opção.")
+            continue
             
     
     
