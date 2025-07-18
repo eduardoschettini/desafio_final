@@ -106,12 +106,12 @@ def tela_inicial(tela):
                 case 0:
                     print("Obrigado por usar nosso programa!!!\n")
                     ativo = False
-                    break
+                    sys.exit(0)
                 case _:
                     print("Opção inválida, escolha uma opcão válida.")
                     continue
         except ValueError:
-            print("Por favor, digite um número inteiro válido para a opção.")
+            print("\n\nPor favor, digite um número inteiro válido para a opção.\n\n")
             continue
 
 
@@ -172,7 +172,9 @@ def consultar_transacao_por_ID(tela):
     
     jaPesquisou = False
 
-    while True:
+    ativo = True
+
+    while ativo:
         print(f"Bem-vindo, {nomeUsuario}!")
         print('conta: 0000001-0')
         print("\n- Pesquisar Transação por ID.")
@@ -198,7 +200,7 @@ def consultar_transacao_por_ID(tela):
 
                     transacao = next((t for t in bd if t['UUID'] == uuid_to_search), None)
                     if transacao:
-                        print("Transação encontrada: \n"
+                        print("\nTransação encontrada: \n"
                             f"UUID: {transacao['UUID']}\n"
                             f"Valor: {transacao['valor']}\n"
                             f"Categoria: {transacao['categoria']}\n\n")
@@ -209,8 +211,10 @@ def consultar_transacao_por_ID(tela):
                     continue
                 case 2:
                     tela_inicial('consultar_transacao_por_ID')
+                    ativo = False
                     break
                 case 3:
+                    ativo = False
                     match tela:
                         case 'visualizar_relatorios':
                             visualizar_relatorios('consultar_transacao_por_ID')
@@ -229,7 +233,7 @@ def consultar_transacao_por_ID(tela):
                             break
 
         except ValueError:
-            print("Por favor, digite um número inteiro válido para a opção.")
+            print("\n\nPor favor, digite um número inteiro válido para a opção.\n\n")
             continue
             
     
