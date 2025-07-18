@@ -231,6 +231,9 @@ def consultar_transacao_por_ID(tela):
                         case 'salvar_relatorio':
                             salvar_relatorio('consultar_transacao_por_ID')
                             break
+                case _:
+                    print("Opção inválida, escolha uma opcão válida.")
+                    continue
 
         except ValueError:
             print("\n\nPor favor, digite um número inteiro válido para a opção.\n\n")
