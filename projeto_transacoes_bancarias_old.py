@@ -17,32 +17,27 @@ from data import settings
 # SYSTEM functions 
 # -----------------------
 # não alterar nada das funções de system
-def gera_transacao(categoria):
-    return {
-        "UUID": str(uuid.uuid4()),
-        "valor": round(random.uniform(1.0, 1000.0), 2),  # Preço aleatório entre 1 e 1000
-        "categoria": categoria
-    }
-
-def criar_transacoes(proporcao_categorias, num_transacoes=1,  categoria=None, seed=settings.seed):
+def criar_transacoes(num_transacoes, proporcao_categorias, seed=settings.seed):
     assert sum([proporcao_categorias[k] for k in proporcao_categorias])==1, '`proporcao_categorias` não soma 100%! Favor rever.'
 
     # garantir reprodutibilidade dos valores
     random.seed(seed)
-    
-    # Insere as transações para uma determinada categoria.
-    if categoria:
-        return [gera_transacao(categoria) for _ in range(0, num_transacoes)]
-    
+
     # Calcula o número de transações por categoria com base na proporção
     numero_transacoes_por_categoria = {categoria: int(num_transacoes * proporcao) for categoria, proporcao in proporcao_categorias.items()}
-
-    # Gera as transações
+    
     transacoes = []
+    
+    # Gera as transações
     for categoria, quantidade in numero_transacoes_por_categoria.items():
         for _ in range(quantidade):
-            transacoes.append(gera_transacao(categoria))
-
+            transacao = {
+                "UUID": str(uuid.uuid4()),
+                "valor": round(random.uniform(1.0, 1000.0), 2),  # Preço aleatório entre 1 e 1000
+                "categoria": categoria
+            }
+            transacoes.append(transacao)
+    
     return transacoes
 
 def salvar_json(transacoes, path2save, filename):
@@ -54,7 +49,7 @@ def salvar_json(transacoes, path2save, filename):
     print(f"Arquivo salvo em: {os.path.abspath(os.path.curdir)+'/'+path2save+'/'+filename}")
 
 def criar_bd(num_transacoes:int = 10000, proporcao_categorias:list = settings.categorias_proporcao, path2save="./data", filename='transactions.json'):
-    salvar_json(criar_transacoes(num_transacoes=num_transacoes,  proporcao_categorias=proporcao_categorias),
+    salvar_json(criar_transacoes(num_transacoes,  proporcao_categorias),
                 path2save, filename
     )
 
@@ -63,46 +58,29 @@ def load_bd(filepath='./data/transactions.json'):
         bd = json.load(file)
     return bd
 
-def tela_inicial():
-    global nomeUsuario
-    print(f"Bem-vindo {nomeUsuario}!")
-    print('conta: 0000001-0')
-    print("\nEste programa permite gerenciar transações de sua conta pessoal.")
-    print("\nEscolha uma das opções abaixo:")
-    print("1. Visualizar relatórios")
-    print("2. Cadastrar transações")
-    print("3. Editar transações")
-    print("4. Excluir transações")
-    print("5. Consultar transação por ID")
-    print("-" * 10)
-    print("0. Sair")
-    print('\n')
-
-# -----------------------
-# PROGRAM functions 
-# -----------------------
-# pode editar como quiser as funções abaixo! Somente não altere os nomes das funções.
-# para alterar as funções abaixo, basta apagar o `pass` e preencher com as instruções.
-
-def run(tela=None):
-    """
-    Esta é a função principal que vai rodar o programa
-    """  
-
+def tela_inicial(tela):
     global nomeUsuario
     
     ativo = True
-    
-    if tela is None:
-        clear_terminal() 
-        nomeUsuario = input("Informe o seu nome: ")
 
-    # exibe a tela inicial
+    if tela is None:
+        nomeUsuario = input("Informe o seu nome: ")
+    
     while ativo:
-        clear_terminal() 
-        tela_inicial()
+        print(f"Bem-vindo, {nomeUsuario}!")
+        print('conta: 0000001-0')
+        print("\nEste programa permite gerenciar transações de sua conta pessoal.")
+        print("\nEscolha uma das opções abaixo:")
+        print("1. Visualizar relatórios")
+        print("2. Cadastrar transações")
+        print("3. Editar transações")
+        print("4. Excluir transações")
+        print("5. Consultar transação por ID")
+        print("-" * 10)
+        print("0. Sair")
+        print('\n')
+
         opcao =  input("Digite o número da opção: ")
-        clear_terminal() 
         try:
             match int(opcao):
                 case 1:
@@ -134,9 +112,22 @@ def run(tela=None):
                     continue
         except ValueError:
             print("\n\nPor favor, digite um número inteiro válido para a opção.\n\n")
-            input("Pressione Enter para continuar...")
             continue
+
+
+# -----------------------
+# PROGRAM functions 
+# -----------------------
+# pode editar como quiser as funções abaixo! Somente não altere os nomes das funções.
+# para alterar as funções abaixo, basta apagar o `pass` e preencher com as instruções.
+
+def run():
+    """
+    Esta é a função principal que vai rodar o programa
+    """  
+    # exibe a tela inicial
     
+    tela_inicial(None)
 
 def visualizar_relatorios():
     """
@@ -185,7 +176,6 @@ def consultar_transacao_por_ID(tela):
     ativo = True
 
     while ativo:
-        clear_terminal()
         print(f"Bem-vindo, {nomeUsuario}!")
         print('conta: 0000001-0')
         print("\n- Pesquisar Transação por ID.")
@@ -206,7 +196,6 @@ def consultar_transacao_por_ID(tela):
         try:
             match int(opcao):
                 case 1:
-                    clear_terminal()
                     print("Opção selecionada: Visualizar relatórios\n")
                     uuid_to_search = input("Digite o UUID da transação que deseja pesquisar: ")
 
@@ -220,10 +209,9 @@ def consultar_transacao_por_ID(tela):
                         print("Transação não encontrada.")
                     
                     jaPesquisou = True
-                    input("\n\nPressione Enter para continuar...")
                     continue
                 case 2:
-                    run('consultar_transacao_por_ID')
+                    tela_inicial('consultar_transacao_por_ID')
                     ativo = False
                     break
                 case 3:
@@ -249,10 +237,12 @@ def consultar_transacao_por_ID(tela):
                     continue
 
         except ValueError:
-            clear_terminal() 
             print("\n\nPor favor, digite um número inteiro válido para a opção.\n\n")
-            input("Pressione Enter para continuar...")
             continue
+            
+    
+    
+
 
 def cadastrar_transacao():
     """
@@ -272,15 +262,6 @@ def excluir_transacao():
     """
     pass
 
-def clear_terminal():
-    """Clears the terminal screen based on the operating system."""
-    # Check if the operating system is Windows (nt)
-    if os.name == 'nt':
-        _ = os.system('cls')  # Use 'cls' for Windows
-    # Otherwise, assume it's a Unix-like system (Linux, macOS, etc.)
-    else:
-        _ = os.system('clear') # Use 'clear' for Unix-like systems
-
 # -----------------------
 # MAIN SCRIPT
 # -----------------------
@@ -296,7 +277,7 @@ if __name__ == "__main__":
         criar_bd()
     
     # load bd 
-    bd = load_bd()
+    bd = load_bd() # carregar o banco de dados em uma lista em memória
     # -----------------------
 
     # -----------------------
@@ -305,4 +286,5 @@ if __name__ == "__main__":
     #limpar console (opcional)
     os.system('cls' if os.name == 'nt' else 'clear')
     # inicia o programa
+
     run()
