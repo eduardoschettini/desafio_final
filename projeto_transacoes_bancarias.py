@@ -88,13 +88,15 @@ def run(tela=None):
     """
     Esta é a função principal que vai rodar o programa
     """  
-
+    
     global nomeUsuario
     
     ativo = True
     
     if tela is None:
         clear_terminal() 
+        print(bd.__len__())
+
         nomeUsuario = input("Informe o seu nome: ")
 
     # exibe a tela inicial
@@ -111,7 +113,7 @@ def run(tela=None):
                     continue
                 case 2:
                     print("Cadastrar transações\n")
-                    cadastrar_transacao()
+                    cadastrar_transacao('tela_inicial')
                     continue
                 case 3:
                     print("Opção selecionada: Editar transações\n")
@@ -254,11 +256,109 @@ def consultar_transacao_por_ID(tela):
             input("Pressione Enter para continuar...")
             continue
 
-def cadastrar_transacao():
-    """
-    Cadastra uma nova transação.
-    \nObs:Para gerar um novo uuid, veja como é feito na função `criar_transacoes`.
-    """
+def cadastrar_transacao(tela):
+    global bd
+    global nomeUsuario
+    
+    jaCadastrou = False
+
+    ativo = True
+
+    while ativo:
+        clear_terminal()
+        print(f"Bem-vindo, {nomeUsuario}!")
+        print('conta: 0000001-0')
+        print("\n- Cadastrar uma nova transação.")
+        print("\nEscolha uma das opções abaixo:")
+
+        if not jaCadastrou:
+            print("1. Cadastrar uma transação")
+        else:
+            print("1. Cadastrar uma nova transação")
+
+        print("2. Voltar ao menu principal")
+
+        if tela != 'tela_inicial':
+            print("3. Voltar à tela anterior")
+
+        opcao =  input("Digite o número da opção: ")
+
+        try:
+            categoriaValida = False
+            match int(opcao):
+                case 1:
+                    clear_terminal()
+                    print("Informe os dados necessário para cadastrar numa nova transacao\n")
+                    chaves_categorias = list(settings.categorias_proporcao.keys())
+                    print("Categorias disponíveis:")
+                    for i, categoria in enumerate(chaves_categorias, start=1):
+                        print(f"{i}. {categoria}")
+
+                    opcao_categoria = int(input("\nDigite a categoria da transação (1 - 7): "))
+
+                    if 1 <= opcao_categoria <= len(chaves_categorias):
+                        nome_categoria = chaves_categorias[opcao_categoria - 1]
+                        print(f"Você selecionou a categoria: {nome_categoria}")
+                        input("\nPressione Enter para continuar...")
+                        categoriaValida = True
+                    else:
+                        print("\n\nErro: O número deve ser entre 1 e 7. Por favor, tente novamente.")
+                        input("\nPressione Enter para continuar...")
+                        clear_terminal()
+                        continue
+                    
+                    if categoriaValida:   
+                        valor = float(input("\nDigite o valor da transação: "))
+
+                        clear_terminal()
+                        print(f"Transação cadastrada com sucesso!\n"
+                            f"UUID: {str(uuid.uuid4())}\n"
+                            f"Valor: {valor}\n"
+                            f"Categoria: {nome_categoria}\n\n")
+                        #bd.append({
+                        #    "UUID": str(uuid.uuid4()),
+                        #    "valor": valor,
+                        #    "categoria": nome_categoria
+                        #})
+                        jaCadastrou = True
+                        #salvar_json(bd, './data', 'transactions.json')
+                        print("Transação salva com sucesso!")
+                        #clear_terminal()
+
+                        input("\n\nPressione Enter para continuar...")
+                        continue
+                case 2:
+                    run('cadastrar_transacao')
+                    ativo = False
+                    break
+                case 3:
+                    ativo = False
+                    match tela:
+                        case 'visualizar_relatorios':
+                            visualizar_relatorios('consultar_transacao_por_ID')
+                            break
+                        case 'cadastrar_transacao':
+                            cadastrar_transacao('consultar_transacao_por_ID')
+                            break
+                        case 'editar_transacao_por_ID':
+                            editar_transacao_por_ID('consultar_transacao_por_ID')
+                            break  
+                        case 'excluir_transacao':
+                            excluir_transacao('consultar_transacao_por_ID')
+                            break
+                        case 'salvar_relatorio':
+                            salvar_relatorio('consultar_transacao_por_ID')
+                            break
+                case _:
+                    print("Opção inválida, escolha uma opcão válida.")
+                    continue
+        except ValueError as e:
+            clear_terminal() 
+            print("\n\nPor favor, digite um número válido para a opção.\n\n")
+            input("Pressione Enter para continuar...")
+        except Exception as e:
+            print(f"Ocorreu um erro inesperado: {e}")
+            input("Pressione Enter para continuar...")
 
 def editar_transacao_por_ID():
     """
