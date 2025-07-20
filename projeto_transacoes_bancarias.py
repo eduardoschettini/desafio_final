@@ -135,7 +135,7 @@ def run(tela=None):
             continue
     
 
-def visualizar_relatorios():
+def visualizar_relatorios(tela):
     global bd
     global nomeUsuario
     
@@ -147,13 +147,13 @@ def visualizar_relatorios():
         clear_terminal()
         print(f"Bem-vindo, {nomeUsuario}!")
         print('conta: 0000001-0')
-        print("\n- Pesquisar Transação por ID.")
+        print("\n- Visualizar Relatórios.")
         print("\nEscolha uma das opções abaixo:")
 
         if not jaPesquisou:
-            print("1. Pesquisar uma transação")
+            print("1. Visualizar um Relatório")
         else:
-            print("1. Pesquisar uma nova transação")
+            print("1. Visualizar um novo Relatório")
 
         print("2. Voltar ao menu principal")
 
@@ -163,44 +163,90 @@ def visualizar_relatorios():
         opcao =  input("Digite o número da opção: ")
 
         try:
-            print("Ainda sem código!")
+            match int(opcao):
+                case 1:
+                    clear_terminal()
+                    print("Opção selecionada: Visualizar relatórios\n")
+                    print("""Informe o tipo de relatório que deseja visualizar:
+                    \n1. Consultar transações por UUDI
+                    \n2. Calcular total de transações
+                    \n3. Mostrar as 5 transações com maior valor
+                    \n4. Calcular média das transações""")
+                    
+                    opcao_relatorio = input("\nDigite o número da opção (1-4): ")
+
+                    match int(opcao_relatorio):
+                        case 1:
+                            consultar_transacao_por_ID('visualizar_relatorios')
+                            jaPesquisou = True
+                            continue
+                        case 2:
+                            calcular_total_transacoes('visualizar_relatorios')
+                            jaPesquisou = True
+                            continue
+                        case 3:
+                            mostrar_m5_transacoes('visualizar_relatorios')
+                            jaPesquisou = True
+                            continue
+                        case 4:
+                            calcular_media('visualizar_relatorios')
+                            jaPesquisou = True
+                            continue
+                        case _:
+                            print("Opção inválida, escolha uma opção válida.")
+                            input("\n\nPressione Enter para continuar...")
+                            continue                    
+                case 2:
+                    run('consultar_transacao_por_ID')
+                    ativo = False
+                    break
+                case 3:
+                    ativo = False
+                    match tela:
+                        case 'visualizar_relatorios':
+                            visualizar_relatorios('visualizar_relatorios')
+                            break
+                        case 'cadastrar_transacao':
+                            cadastrar_transacao('visualizar_relatorios')
+                            break
+                        case 'editar_transacao_por_ID':
+                            editar_transacao_por_ID('visualizar_relatorios')
+                            break  
+                        case 'excluir_transacao':
+                            excluir_transacao('visualizar_relatorios')
+                            break
+                        case 'salvar_relatorio':
+                            salvar_relatorio('visualizar_relatorios')
+                            break
+                case _:
+                    print("Opção inválida, escolha uma opcão válida.")
+                    continue
+
+            input("Pressione Enter para continuar...")
         except ValueError:
             clear_terminal() 
             print("\n\nPor favor, digite um número inteiro válido para a opção.\n\n")
             input("Pressione Enter para continuar...")
             continue
 
-def salvar_relatorio():
-    """
-    Salvar o relatório gerado em .txt
-    \nAplicar esta função em todos os relatórios listados em `visualizar_relatorios`
-    """
+def salvar_relatorio(tela):
+    print('Função salvar_relatorio ainda não implementada.')
+    input("Pressione Enter para continuar...")
 
-def calcular_total_transacoes():
-    """
-    Calcula o valor total de transações da conta.
-    Utilize essa mesma função para o caso `por categoria`
-    """
-    pass
+def calcular_total_transacoes(tela):
+    print('Função calcular_total_transacoes ainda não implementada.')
+    input("Pressione Enter para continuar...")
+    visualizar_relatorios('calcular_total_transacoes')
 
-def mostrar_m5_transacoes():
-    """
-    Mostra as m5 transações realizadas, sendo m parâmetro que deve ser adicionada à função.
-    \nm : 'max','min','median', sendo 
-    \n\t'max' mostra os top 5 maior valor,
-    \n\t'min' mostra os top 5 menor valor,
-    \n\t'median' mostra os top 5 valores próximos a média
-    
-    Utilize essa mesma função para o caso `por categoria`
-    """
-    pass
+def mostrar_m5_transacoes(tela):
+    print('Função mostrar_m5_transacoes ainda não implementada.')
+    input("Pressione Enter para continuar...")
+    visualizar_relatorios('mostrar_m5_transacoes')
 
 def calcular_media():
-    """
-    Calcula a média dos valores das transações.
-    Utilize essa mesma função para o caso `por categoria`
-    """
-    pass
+    print('Função calcular_media ainda não implementada.')
+    input("Pressione Enter para continuar...")
+    visualizar_relatorios('calcular_media')
 
 def consultar_transacao_por_ID(tela):
     global bd
@@ -216,13 +262,13 @@ def consultar_transacao_por_ID(tela):
             clear_terminal()
             print(f"Bem-vindo, {nomeUsuario}!")
             print('conta: 0000001-0')
-            print("\n- Pesquisar Transação por ID.")
+            print("\n- Pesquisar Transação por UUID.")
             print("\nEscolha uma das opções abaixo:")
 
         if not jaPesquisou:
-            print("1. Pesquisar uma transação")
+            print("1. Pesquisar uma transação por UUID")
         else:
-            print("1. Pesquisar uma nova transação")
+            print("1. Pesquisar uma nova transação por UUID")
 
         print("2. Voltar ao menu principal")
 
@@ -277,6 +323,7 @@ def consultar_transacao_por_ID(tela):
                             break
                 case _:
                     print("Opção inválida, escolha uma opcão válida.")
+                    input("\n\nPressione Enter para continuar...")
                     continue
 
         except ValueError:
