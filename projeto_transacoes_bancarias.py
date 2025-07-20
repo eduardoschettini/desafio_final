@@ -419,7 +419,7 @@ def editar_transacao_por_ID(tela):
                     #clear_terminal()
 
                     clear_terminal()
-                    print("Opção selecionada: Visualizar relatórios\n")
+                    print("Opção selecionada: Editar uma transação\n")
                     uuid_to_modified = input("Digite o UUID da transação que deseja modificar: ")
 
                     transacao = next((t for t in bd if t['UUID'] == uuid_to_modified), None)
@@ -428,56 +428,61 @@ def editar_transacao_por_ID(tela):
                             f"UUID: {transacao['UUID']}\n"
                             f"Valor: {transacao['valor']}\n"
                             f"Categoria: {transacao['categoria']}\n\n")
+                        
+                        print("Informe a nova categoria\n")
+                        chaves_categorias = list(settings.categorias_proporcao.keys())
+                        print("Categorias disponíveis:")
+                        for i, categoria in enumerate(chaves_categorias, start=1):
+                            print(f"{i}. {categoria}")
 
-                    print("Informe a nova categoria\n")
-                    chaves_categorias = list(settings.categorias_proporcao.keys())
-                    print("Categorias disponíveis:")
-                    for i, categoria in enumerate(chaves_categorias, start=1):
-                        print(f"{i}. {categoria}")
-
-                    opcao_categoria = int(input("\nDigite a categoria da transação (1 - 7), -1 para não editar a categoria: "))
-                    if opcao_categoria != -1:
-                        if 1 <= opcao_categoria <= len(chaves_categorias):
-                            nova_categoria = chaves_categorias[opcao_categoria - 1]
-                            print(f"Você selecionou a categoria: {nova_categoria}")
+                        opcao_categoria = int(input("\nDigite a categoria da transação (1 - 7), -1 para não editar a categoria: "))
+                        if opcao_categoria != -1:
+                            if 1 <= opcao_categoria <= len(chaves_categorias):
+                                nova_categoria = chaves_categorias[opcao_categoria - 1]
+                                print(f"Você selecionou a categoria: {nova_categoria}")
+                                categoriaValida = True
+                            else:
+                                print("\n\nErro: O número deve ser entre 1 e 7. Por favor, tente novamente.")
+                                input("\nPressione Enter para continuar...")
+                                clear_terminal()
+                                continue
+                        else:
+                            nova_categoria = transacao['categoria']
                             categoriaValida = True
-                        else:
-                            print("\n\nErro: O número deve ser entre 1 e 7. Por favor, tente novamente.")
-                            input("\nPressione Enter para continuar...")
-                            clear_terminal()
-                            continue
-                    else:
-                        nova_categoria = transacao['categoria']
-                        categoriaValida = True
                     
-                    if categoriaValida:   
-                        valor = float(input("\nDigite o valor da transação (-1 para não editar o valor): "))
-                        if valor >= 0:
-                            novo_valor = valor
-                        else:
-                            novo_valor = transacao['valor']
-                        
-                        nova_transacao = {'UUID': transacao['UUID'], 'valor': novo_valor, 'categoria': nova_categoria}
+                        if categoriaValida:   
+                            valor = float(input("\nDigite o valor da transação (-1 para não editar o valor): "))
+                            if valor >= 0:
+                                novo_valor = valor
+                            else:
+                                novo_valor = transacao['valor']
+                            
+                            nova_transacao = {'UUID': transacao['UUID'], 'valor': novo_valor, 'categoria': nova_categoria}
 
-                        clear_terminal()
-                        print(f"Dados da alteração da Transação!\n"
-                            f"UUID: {nova_transacao['UUID']}\n"
-                            f"Valor: {nova_transacao['valor']}\n"
-                            f"Categoria: {nova_transacao['categoria']}\n")
-                        
-                        print("Deseja salvar as alterações? (s/n)")
-                        
-                        if(input().strip().lower() == 's'):
-                            uuid_to_update = nova_transacao['UUID']
-                            for idx, transacao in enumerate(bd):
-                                if transacao['UUID'] == uuid_to_update:
-                                    bd[idx] = nova_transacao  
-                                    salvar_json(bd, './data', 'transactions.json')
-                                    print("Transação atualizada e salva com sucesso!")
-                                    jaCadastrou = True
+                            clear_terminal()
+                            print(f"Dados da alteração da Transação!\n"
+                                f"UUID: {nova_transacao['UUID']}\n"
+                                f"Valor: {nova_transacao['valor']}\n"
+                                f"Categoria: {nova_transacao['categoria']}\n")
+                            
+                            print("Deseja salvar as alterações? (s/n)")
+                            
+                            if(input().strip().lower() == 's'):
+                                uuid_to_update = nova_transacao['UUID']
+                                for idx, transacao in enumerate(bd):
+                                    if transacao['UUID'] == uuid_to_update:
+                                        bd[idx] = nova_transacao  
+                                        salvar_json(bd, './data', 'transactions.json')
+                                        print("Transação atualizada e salva com sucesso!")
+                                        jaCadastrou = True
 
-                        input("\n\nPressione Enter para continuar...")
-                        continue
+                            input("\n\nPressione Enter para continuar...")
+                            continue
+
+                    else:
+                        print("Transação não encontrada.")
+
+                    
                 case 2:
                     run('cadastrar_transacao')
                     ativo = False
@@ -511,11 +516,96 @@ def editar_transacao_por_ID(tela):
             print(f"Ocorreu um erro inesperado: {e}")
             input("Pressione Enter para continuar...")
 
-def excluir_transacao():
-    """
-    Exclui uma transação específica pelo UUID.
-    """
-    pass
+def excluir_transacao(tela):
+    global bd
+    global nomeUsuario
+    
+    jaCadastrou = False
+
+    ativo = True
+
+    while ativo:
+        clear_terminal()
+        print(f"Bem-vindo, {nomeUsuario}!")
+        print('conta: 0000001-0')
+        print("\n- Excluir Transação por UUID.")
+        print("\nEscolha uma das opções abaixo:")
+
+        if not jaExcluiu:
+            print("1. Excluir uma transação")
+        else:
+            print("1. Excluir uma nova transação")
+
+        print("2. Voltar ao menu principal")
+
+        if tela != 'tela_inicial':
+            print("3. Voltar à tela anterior")
+
+        opcao =  input("Digite o número da opção: ")
+
+        try:
+            categoriaValida = False
+            match int(opcao):
+                case 1:
+                    #clear_terminal()
+
+                    clear_terminal()
+                    print("Opção selecionada: Excluir Transação\n")
+                    uuid_to_remove = input("Digite o UUID da transação que deseja excluir: ")
+
+                    transacao = next((t for t in bd if t['UUID'] == uuid_to_remove), None)
+                    if transacao:
+                        print("\nTransação encontrada: \n"
+                            f"UUID: {transacao['UUID']}\n"
+                            f"Valor: {transacao['valor']}\n"
+                            f"Categoria: {transacao['categoria']}\n\n")
+                        
+                        deseja_remover = int(input("\nDeseja remover a transação? (1 - Sim, 2 - Não): "))
+                        if deseja_remover == 1:
+                            bd = [t for t in bd if t['UUID'] != uuid_to_remove]
+                            salvar_json(bd, './data', 'transactions.json')
+                            print("Transação removida com sucesso!")
+                            jaCadastrou = True
+
+                            input("\n\nPressione Enter para continuar...")
+                            continue
+
+                    else:
+                        print("Transação não encontrada.")
+
+                    
+                case 2:
+                    run('cadastrar_transacao')
+                    ativo = False
+                    break
+                case 3:
+                    ativo = False
+                    match tela:
+                        case 'visualizar_relatorios':
+                            visualizar_relatorios('consultar_transacao_por_ID')
+                            break
+                        case 'cadastrar_transacao':
+                            cadastrar_transacao('consultar_transacao_por_ID')
+                            break
+                        case 'editar_transacao_por_ID':
+                            editar_transacao_por_ID('consultar_transacao_por_ID')
+                            break  
+                        case 'excluir_transacao':
+                            excluir_transacao('consultar_transacao_por_ID')
+                            break
+                        case 'salvar_relatorio':
+                            salvar_relatorio('consultar_transacao_por_ID')
+                            break
+                case _:
+                    print("Opção inválida, escolha uma opcão válida.")
+                    continue
+        except ValueError as e:
+            clear_terminal() 
+            print("\n\nPor favor, digite um número válido para a opção.\n\n")
+            input("Pressione Enter para continuar...")
+        except Exception as e:
+            print(f"Ocorreu um erro inesperado: {e}")
+            input("Pressione Enter para continuar...")
 
 def clear_terminal():
     """Clears the terminal screen based on the operating system."""
