@@ -73,7 +73,6 @@ def tela_inicial():
     print("2. Cadastrar transações")
     print("3. Editar transações")
     print("4. Excluir transações")
-    print("5. Consultar transação por ID")
     print("-" * 10)
     print("0. Sair")
     print('\n')
@@ -95,7 +94,7 @@ def run(tela=None):
     
     if tela is None:
         clear_terminal() 
-        print(bd.__len__())
+        
 
         nomeUsuario = input("Informe o seu nome: ")
 
@@ -104,7 +103,8 @@ def run(tela=None):
         clear_terminal() 
         tela_inicial()
         opcao =  input("Digite o número da opção: ")
-        clear_terminal() 
+        clear_terminal()
+        print(f"Tamanho do banco de dados: {len(bd)} transações") 
         try:
             match int(opcao):
                 case 1:
@@ -122,10 +122,6 @@ def run(tela=None):
                 case 4:
                     print("Opção selecionada: Excluir transações\n")
                     excluir_transacao()
-                    continue
-                case 5:
-                    print("Opção selecionada: Consultar transação por ID\n")
-                    consultar_transacao_por_ID('tela_inicial')
                     continue
                 case 0:
                     print("Obrigado por usar nosso programa!!!\n")
@@ -299,7 +295,6 @@ def cadastrar_transacao(tela):
                     if 1 <= opcao_categoria <= len(chaves_categorias):
                         nome_categoria = chaves_categorias[opcao_categoria - 1]
                         print(f"Você selecionou a categoria: {nome_categoria}")
-                        input("\nPressione Enter para continuar...")
                         categoriaValida = True
                     else:
                         print("\n\nErro: O número deve ser entre 1 e 7. Por favor, tente novamente.")
@@ -310,21 +305,18 @@ def cadastrar_transacao(tela):
                     if categoriaValida:   
                         valor = float(input("\nDigite o valor da transação: "))
 
+                        nova_transacao = {'UUID': str(uuid.uuid4()), 'valor': valor, 'categoria': nome_categoria}
+
                         clear_terminal()
                         print(f"Transação cadastrada com sucesso!\n"
-                            f"UUID: {str(uuid.uuid4())}\n"
-                            f"Valor: {valor}\n"
-                            f"Categoria: {nome_categoria}\n\n")
-                        #bd.append({
-                        #    "UUID": str(uuid.uuid4()),
-                        #    "valor": valor,
-                        #    "categoria": nome_categoria
-                        #})
+                            f"UUID: {nova_transacao['UUID']}\n"
+                            f"Valor: {nova_transacao['valor']}\n"
+                            f"Categoria: {nova_transacao['categoria']}\n\n")
+                        bd.append(nova_transacao)
                         jaCadastrou = True
-                        #salvar_json(bd, './data', 'transactions.json')
+                        salvar_json(bd, './data', 'transactions.json')
                         print("Transação salva com sucesso!")
-                        #clear_terminal()
-
+                        
                         input("\n\nPressione Enter para continuar...")
                         continue
                 case 2:
