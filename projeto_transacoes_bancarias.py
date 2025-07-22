@@ -220,24 +220,30 @@ def visualizar_relatorios(tela_anterior):
             input("Pressione Enter para continuar...")
             continue
 
-def salvar_relatorio(tela):
+def salvar_relatorio(dados_relatorio):
     print('Função salvar_relatorio ainda não implementada.')
     input("Pressione Enter para continuar...")
 
-def calcular_total_transacoes(tela):
-    print('Função calcular_total_transacoes ainda não implementada.')
-    input("Pressione Enter para continuar...")
-    visualizar_relatorios('calcular_total_transacoes')
+def calcular_total_transacoes():
+    global bd
 
-def mostrar_m5_transacoes(tela):
+    valor_total = sum(transacao['valor'] for transacao in bd)
+
+    resultado = f"Total de transações: R$ {valor_total:.2f}"
+    return resultado
+
+def mostrar_m5_transacoes():
     print('Função mostrar_m5_transacoes ainda não implementada.')
     input("Pressione Enter para continuar...")
     visualizar_relatorios('mostrar_m5_transacoes')
 
 def calcular_media():
-    print('Função calcular_media ainda não implementada.')
-    input("Pressione Enter para continuar...")
-    visualizar_relatorios('calcular_media')
+    global bd
+
+    media = sum(transacao['valor'] for transacao in bd) / len(bd) if bd else 0
+
+    resultado = f"Média das transações: R$ {media:.2f}"
+    return resultado
 
 def consultar_transacao_por_ID(tela_anterior):
     global bd
