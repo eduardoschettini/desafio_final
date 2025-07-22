@@ -162,7 +162,7 @@ def visualizar_relatorios(tela_anterior):
 
         print("2. Voltar ao menu principal")
 
-        if tela != 'tela_inicial':
+        if tela_anterior != 'tela_inicial':
             print("3. Voltar à tela anterior")
 
         opcao =  input("Digite o número da opção: ")
@@ -171,30 +171,21 @@ def visualizar_relatorios(tela_anterior):
             match int(opcao):
                 case 1:
                     clear_terminal()
-                    print("Opção selecionada: Visualizar relatórios\n")
-                    print("""Informe o tipo de relatório que deseja visualizar:
-                    \n1. Consultar transações por UUDI
-                    \n2. Calcular total de transações
-                    \n3. Mostrar as 5 transações com maior valor
-                    \n4. Calcular média das transações""")
+                    resultado = calcular_total_transacoes()
+                    resultado += "\n"
+                    resultado += calcular_media()
+                    resultado += "\n"
+                    resultado += mostrar_m5_transacoes()
+                    print(resultado)
                     
-                    opcao_relatorio = input("\nDigite o número da opção (1-4): ")
+                    opcao_salvar_relatorio = input("\nDeseja salvar o relatorio (S / N): ").lower()
 
-                    match int(opcao_relatorio):
-                        case 1:
-                            consultar_transacao_por_ID('visualizar_relatorios')
-                            jaPesquisou = True
+                    match opcao_relatorio:
+                        case 's':
+                            
                             continue
-                        case 2:
-                            calcular_total_transacoes('visualizar_relatorios')
-                            jaPesquisou = True
-                            continue
-                        case 3:
-                            mostrar_m5_transacoes('visualizar_relatorios')
-                            jaPesquisou = True
-                            continue
-                        case 4:
-                            calcular_media('visualizar_relatorios')
+                        case 'n':
+                            print("\nObrigado.")
                             jaPesquisou = True
                             continue
                         case _:
@@ -202,7 +193,7 @@ def visualizar_relatorios(tela_anterior):
                             input("\n\nPressione Enter para continuar...")
                             continue                    
                 case 2:
-                    run('consultar_transacao_por_ID')
+                    run('visualizar_relatorios')
                     ativo = False
                     break
                 case 3:
@@ -233,9 +224,39 @@ def calcular_total_transacoes():
     return resultado
 
 def mostrar_m5_transacoes():
-    print('Função mostrar_m5_transacoes ainda não implementada.')
-    input("Pressione Enter para continuar...")
-    visualizar_relatorios('mostrar_m5_transacoes')
+    global bd
+
+    if not bd:
+        print("Nenhuma transação disponível.")
+        return
+
+    # Ordena as transações pelo valor
+    transacoes_ordenadas = sorted(bd, key=lambda x: x['valor'])
+
+    # Top 5 menores
+    resultado = "\nTop 5 menores transações localizadas:"
+    for t in transacoes_ordenadas[:5]:
+        resultado += f"\nUUID: {t['UUID']} | Valor: R$ {t['valor']:.2f} | Categoria: {t['categoria']}"
+
+    # Top 5 maiores
+    resultado += "\n\nTop 5 maiores transações localizas:"
+    for t in transacoes_ordenadas[-5:][::-1]:
+        resultado += f"\nUUID: {t['UUID']} | Valor: R$ {t['valor']:.2f} | Categoria: {t['categoria']}"
+
+    # Top 5 próximas à mediana
+    n = len(transacoes_ordenadas)
+    resultado += "\n\nTop 5 transações próximas à mediana calculada:"
+    if n <= 5:
+        median_transacoes = transacoes_ordenadas
+    else:
+        meio = n // 2
+        start = max(0, meio - 2)
+        end = min(n, meio + 3)
+        median_transacoes = transacoes_ordenadas[start:end]
+    for t in median_transacoes:
+        resultado += f"\nUUID: {t['UUID']} | Valor: R$ {t['valor']:.2f} | Categoria: {t['categoria']}"
+    
+    return resultado
 
 def calcular_media():
     global bd
@@ -607,19 +628,14 @@ def retorna_tela_anterior(tela_atual, tela_anterior):
     match tela_anterior:
         case 'visualizar_relatorios':
             visualizar_relatorios(tela_atual)
-            break
         case 'cadastrar_transacao':
             cadastrar_transacao(tela_atual)
-            break
         case 'editar_transacao_por_ID':
             editar_transacao_por_ID(tela_atual)
-            break  
         case 'excluir_transacao':
             excluir_transacao(tela_atual)
-            break
         case 'salvar_relatorio':
             salvar_relatorio(tela_atual)
-            break
 # -----------------------
 # MAIN SCRIPT
 # -----------------------
