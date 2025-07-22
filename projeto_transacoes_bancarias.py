@@ -140,7 +140,7 @@ def run(tela=None):
             continue
     
 
-def visualizar_relatorios(tela):
+def visualizar_relatorios(tela_anterior):
     global bd
     global nomeUsuario
     
@@ -207,22 +207,8 @@ def visualizar_relatorios(tela):
                     break
                 case 3:
                     ativo = False
-                    match tela:
-                        case 'visualizar_relatorios':
-                            visualizar_relatorios('visualizar_relatorios')
-                            break
-                        case 'cadastrar_transacao':
-                            cadastrar_transacao('visualizar_relatorios')
-                            break
-                        case 'editar_transacao_por_ID':
-                            editar_transacao_por_ID('visualizar_relatorios')
-                            break  
-                        case 'excluir_transacao':
-                            excluir_transacao('visualizar_relatorios')
-                            break
-                        case 'salvar_relatorio':
-                            salvar_relatorio('visualizar_relatorios')
-                            break
+                    retorna_tela_anterior('visualizar_relatorios', tela_anterior)
+                    break
                 case _:
                     print("Opção inválida, escolha uma opcão válida.")
                     continue
@@ -253,7 +239,7 @@ def calcular_media():
     input("Pressione Enter para continuar...")
     visualizar_relatorios('calcular_media')
 
-def consultar_transacao_por_ID(tela):
+def consultar_transacao_por_ID(tela_anterior):
     global bd
     global nomeUsuario
     
@@ -293,7 +279,7 @@ def consultar_transacao_por_ID(tela):
                     if transacao:
                         print("\nTransação encontrada: \n"
                             f"UUID: {transacao['UUID']}\n"
-                            f"Valor: {transacao['valor']}\n"
+                            f"Valor: R$ {transacao['valor']}\n"
                             f"Categoria: {transacao['categoria']}\n\n")
                     else:
                         print("Transação não encontrada.")
@@ -310,22 +296,7 @@ def consultar_transacao_por_ID(tela):
                     break
                 case 3:
                     ativo = False
-                    match tela:
-                        case 'visualizar_relatorios':
-                            visualizar_relatorios('consultar_transacao_por_ID')
-                            break
-                        case 'cadastrar_transacao':
-                            cadastrar_transacao('consultar_transacao_por_ID')
-                            break
-                        case 'editar_transacao_por_ID':
-                            editar_transacao_por_ID('consultar_transacao_por_ID')
-                            break  
-                        case 'excluir_transacao':
-                            excluir_transacao('consultar_transacao_por_ID')
-                            break
-                        case 'salvar_relatorio':
-                            salvar_relatorio('consultar_transacao_por_ID')
-                            break
+                    retorna_tela_anterior('consultar_transacao_por_ID', tela_anterior)
                 case _:
                     print("Opção inválida, escolha uma opcão válida.")
                     input("\n\nPressione Enter para continuar...")
@@ -337,7 +308,7 @@ def consultar_transacao_por_ID(tela):
             input("Pressione Enter para continuar...")
             continue
 
-def cadastrar_transacao(tela):
+def cadastrar_transacao(tela_anterior):
     global bd
     global nomeUsuario
     
@@ -410,22 +381,8 @@ def cadastrar_transacao(tela):
                     break
                 case 3:
                     ativo = False
-                    match tela:
-                        case 'visualizar_relatorios':
-                            visualizar_relatorios('consultar_transacao_por_ID')
-                            break
-                        case 'cadastrar_transacao':
-                            cadastrar_transacao('consultar_transacao_por_ID')
-                            break
-                        case 'editar_transacao_por_ID':
-                            editar_transacao_por_ID('consultar_transacao_por_ID')
-                            break  
-                        case 'excluir_transacao':
-                            excluir_transacao('consultar_transacao_por_ID')
-                            break
-                        case 'salvar_relatorio':
-                            salvar_relatorio('consultar_transacao_por_ID')
-                            break
+                    retorna_tela_anterior('cadastrar_transacao', tela_anterior)
+                    break
                 case _:
                     print("Opção inválida, escolha uma opcão válida.")
                     continue
@@ -437,7 +394,7 @@ def cadastrar_transacao(tela):
             print(f"Ocorreu um erro inesperado: {e}")
             input("Pressione Enter para continuar...")
 
-def editar_transacao_por_ID(tela):
+def editar_transacao_por_ID(tela_anterior):
     global bd
     global nomeUsuario
     
@@ -541,22 +498,8 @@ def editar_transacao_por_ID(tela):
                     break
                 case 3:
                     ativo = False
-                    match tela:
-                        case 'visualizar_relatorios':
-                            visualizar_relatorios('consultar_transacao_por_ID')
-                            break
-                        case 'cadastrar_transacao':
-                            cadastrar_transacao('consultar_transacao_por_ID')
-                            break
-                        case 'editar_transacao_por_ID':
-                            editar_transacao_por_ID('consultar_transacao_por_ID')
-                            break  
-                        case 'excluir_transacao':
-                            excluir_transacao('consultar_transacao_por_ID')
-                            break
-                        case 'salvar_relatorio':
-                            salvar_relatorio('consultar_transacao_por_ID')
-                            break
+                    retorna_tela_anterior('editar_transacao_por_ID', tela_anterior)
+                    break
                 case _:
                     print("Opção inválida, escolha uma opcão válida.")
                     continue
@@ -568,7 +511,7 @@ def editar_transacao_por_ID(tela):
             print(f"Ocorreu um erro inesperado: {e}")
             input("Pressione Enter para continuar...")
 
-def excluir_transacao(tela):
+def excluir_transacao(tela_anterior):
     global bd
     global nomeUsuario
     
@@ -632,22 +575,8 @@ def excluir_transacao(tela):
                     break
                 case 3:
                     ativo = False
-                    match tela:
-                        case 'visualizar_relatorios':
-                            visualizar_relatorios('consultar_transacao_por_ID')
-                            break
-                        case 'cadastrar_transacao':
-                            cadastrar_transacao('consultar_transacao_por_ID')
-                            break
-                        case 'editar_transacao_por_ID':
-                            editar_transacao_por_ID('consultar_transacao_por_ID')
-                            break  
-                        case 'excluir_transacao':
-                            excluir_transacao('consultar_transacao_por_ID')
-                            break
-                        case 'salvar_relatorio':
-                            salvar_relatorio('consultar_transacao_por_ID')
-                            break
+                    retorna_tela_anterior('excluir_transacao', tela)
+                    break
                 case _:
                     print("Opção inválida, escolha uma opcão válida.")
                     continue
@@ -668,6 +597,23 @@ def clear_terminal():
     else:
         _ = os.system('clear') # Use 'clear' for Unix-like systems
 
+def retorna_tela_anterior(tela_atual, tela_anterior):
+    match tela_anterior:
+        case 'visualizar_relatorios':
+            visualizar_relatorios(tela_atual)
+            break
+        case 'cadastrar_transacao':
+            cadastrar_transacao(tela_atual)
+            break
+        case 'editar_transacao_por_ID':
+            editar_transacao_por_ID(tela_atual)
+            break  
+        case 'excluir_transacao':
+            excluir_transacao(tela_atual)
+            break
+        case 'salvar_relatorio':
+            salvar_relatorio(tela_atual)
+            break
 # -----------------------
 # MAIN SCRIPT
 # -----------------------
