@@ -73,6 +73,7 @@ def tela_inicial():
     print("2. Cadastrar transações")
     print("3. Editar transações")
     print("4. Excluir transações")
+    print("5. Consultar transação por ID")
     print("-" * 10)
     print("0. Sair")
     print('\n')
@@ -121,6 +122,10 @@ def run(tela=None):
                 case 4:
                     print("Opção selecionada: Excluir transações\n")
                     excluir_transacao(tela)
+                    continue
+                case 5:
+                    print("Opção selecionada: Consultar transação por ID\n")
+                    consultar_transacao_por_ID(tela)
                     continue
                 case 0:
                     print("Obrigado por usar nosso programa!!!\n")
