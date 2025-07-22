@@ -180,9 +180,9 @@ def visualizar_relatorios(tela_anterior):
                     
                     opcao_salvar_relatorio = input("\nDeseja salvar o relatorio (S / N): ").lower()
 
-                    match opcao_relatorio:
+                    match opcao_salvar_relatorio:
                         case 's':
-                            
+                            salvar_relatorio(resultado)
                             continue
                         case 'n':
                             print("\nObrigado.")
@@ -212,8 +212,10 @@ def visualizar_relatorios(tela_anterior):
             continue
 
 def salvar_relatorio(dados_relatorio):
-    print('Função salvar_relatorio ainda não implementada.')
-    input("Pressione Enter para continuar...")
+    filename = "relatorio_de_transacoes.txt"
+    with open(filename, "w", encoding="utf-8") as file:
+        file.write(dados_relatorio)
+    print(f"Relatório salvo com sucesso em: {os.path.abspath(filename)}")
 
 def calcular_total_transacoes():
     global bd
