@@ -278,12 +278,11 @@ def consultar_transacao_por_ID(tela_anterior):
 
     while ativo:
         
-        if tela_anterior is None:
-            clear_terminal()
-            print(f"Bem-vindo, {nomeUsuario}!")
-            print('conta: 0000001-0')
-            print("\n- Pesquisar Transação por UUID.")
-            print("\nEscolha uma das opções abaixo:")
+        clear_terminal()
+        print(f"Bem-vindo, {nomeUsuario}!")
+        print('conta: 0000001-0')
+        print("\n- Pesquisar Transação por UUID.")
+        print("\nEscolha uma das opções abaixo:")
 
         if not jaPesquisou:
             print("1. Pesquisar uma transação por UUID")
