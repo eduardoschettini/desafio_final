@@ -278,7 +278,7 @@ def consultar_transacao_por_ID(tela_anterior):
 
     while ativo:
         
-        if tela is None:
+        if tela_anterior is None:
             clear_terminal()
             print(f"Bem-vindo, {nomeUsuario}!")
             print('conta: 0000001-0')
@@ -292,7 +292,7 @@ def consultar_transacao_por_ID(tela_anterior):
 
         print("2. Voltar ao menu principal")
 
-        if tela != 'tela_inicial':
+        if tela_anterior != 'tela_inicial':
             print("3. Voltar à tela anterior")
 
         opcao =  input("Digite o número da opção: ")
@@ -315,7 +315,7 @@ def consultar_transacao_por_ID(tela_anterior):
                     
                     jaPesquisou = True
                     
-                    if tela is None:
+                    if tela_anterior is None:
                         input("\n\nPressione Enter para continuar...")
                     
                     continue
@@ -359,7 +359,7 @@ def cadastrar_transacao(tela_anterior):
 
         print("2. Voltar ao menu principal")
 
-        if tela != 'tela_inicial':
+        if tela_anterior != 'tela_inicial':
             print("3. Voltar à tela anterior")
 
         opcao =  input("Digite o número da opção: ")
@@ -445,7 +445,7 @@ def editar_transacao_por_ID(tela_anterior):
 
         print("2. Voltar ao menu principal")
 
-        if tela != 'tela_inicial':
+        if tela_anterior != 'tela_inicial':
             print("3. Voltar à tela anterior")
 
         opcao =  input("Digite o número da opção: ")
@@ -544,7 +544,7 @@ def excluir_transacao(tela_anterior):
     global bd
     global nomeUsuario
     
-    jaCadastrou = False
+    jaExcluiu = False
 
     ativo = True
 
@@ -562,7 +562,7 @@ def excluir_transacao(tela_anterior):
 
         print("2. Voltar ao menu principal")
 
-        if tela != 'tela_inicial':
+        if tela_anterior != 'tela_inicial':
             print("3. Voltar à tela anterior")
 
         opcao =  input("Digite o número da opção: ")
@@ -589,7 +589,7 @@ def excluir_transacao(tela_anterior):
                             bd = [t for t in bd if t['UUID'] != uuid_to_remove]
                             salvar_json(bd, './data', 'transactions.json')
                             print("Transação removida com sucesso!")
-                            jaCadastrou = True
+                            jaExcluiu = True
 
                             input("\n\nPressione Enter para continuar...")
                             continue
@@ -604,7 +604,7 @@ def excluir_transacao(tela_anterior):
                     break
                 case 3:
                     ativo = False
-                    retorna_tela_anterior('excluir_transacao', tela)
+                    retorna_tela_anterior('excluir_transacao', 'excluir_transacao')
                     break
                 case _:
                     print("Opção inválida, escolha uma opcão válida.")
