@@ -171,12 +171,15 @@ def visualizar_relatorios(tela_anterior):
             match int(opcao):
                 case 1:
                     clear_terminal()
+                    print('conta: 0000001-0')
+                    print("\n- Resultado dos relatórios.")
                     resultado = calcular_total_transacoes()
                     resultado += "\n"
                     resultado += calcular_media()
                     resultado += "\n"
                     resultado += mostrar_m5_transacoes()
                     print(resultado)
+                    jaPesquisou = True
                     
                     opcao_salvar_relatorio = input("\nDeseja salvar o relatorio (S / N): ").lower()
 
@@ -186,7 +189,6 @@ def visualizar_relatorios(tela_anterior):
                             continue
                         case 'n':
                             print("\nObrigado.")
-                            jaPesquisou = True
                             continue
                         case _:
                             print("Opção inválida, escolha uma opção válida.")
