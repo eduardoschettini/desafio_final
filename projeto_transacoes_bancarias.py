@@ -638,6 +638,8 @@ def retorna_tela_anterior(tela_atual, tela_anterior):
             excluir_transacao(tela_atual)
         case 'salvar_relatorio':
             salvar_relatorio(tela_atual)
+        case 'consultar_transacao_por_ID':
+            consultar_transacao_por_ID(tela_atual)
 # -----------------------
 # MAIN SCRIPT
 # -----------------------
