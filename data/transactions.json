@@ -50003,5 +50003,10 @@
         "UUID": "08a185cc-62c9-43e7-87d2-e080aa592d79",
         "valor": 250.0,
         "categoria": "transferencias"
+    },
+    {
+        "UUID": "c5c7fe7a-71d0-4d3f-b87f-3561ee1e94aa",
+        "valor": 1500.0,
+        "categoria": "saude"
     }
 ]

@@ -316,8 +316,7 @@ def consultar_transacao_por_ID(tela_anterior):
                     
                     jaPesquisou = True
                     
-                    if tela_anterior is None:
-                        input("\n\nPressione Enter para continuar...")
+                    input("\n\nPressione Enter para continuar...")
                     
                     continue
                 case 2:
